@@ -1,0 +1,197 @@
+.product-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.85); /* Dark background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+    backdrop-filter: blur(5px);
+}
+
+.product-modal-content {
+    background-color: var(--color-surface); /* Assuming this variable exists, likely dark/black */
+    border: 1px solid var(--color-secondary); /* Gold border */
+    border-radius: 8px;
+    padding: 3.5rem 2rem 2rem; /* Increased top padding for close button space */
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-light);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: all 0.3s;
+    z-index: 20;
+}
+
+.modal-close-btn:hover {
+    color: var(--color-secondary);
+    background: rgba(255, 255, 255, 0.05);
+    transform: rotate(90deg);
+}
+
+.modal-image-container {
+    width: 100%;
+    /* Remove fixed height to adapt to content, but set max-height limits */
+    min-height: 200px;
+    max-height: 500px;
+    overflow: hidden;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* For absolute positioning of arrows */
+    background-color: transparent; /* Remove black background */
+}
+
+/* Image Selection / Carousel Styles */
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: background 0.3s;
+    z-index: 5;
+}
+
+.slider-btn:hover {
+    background: rgba(212, 175, 55, 0.8); /* Gold hover */
+}
+
+.slider-btn.prev {
+    left: 10px;
+}
+
+.slider-btn.next {
+    right: 10px;
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+}
+
+.slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.slider-dot.active {
+    background: var(--color-secondary);
+    transform: scale(1.2);
+}
+
+.modal-image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 450px; /* Limit image height */
+    object-fit: contain; /* Contain to show full image without crop */
+    display: block;
+    border-radius: 4px; /* Slight radius */
+}
+
+.modal-details {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers children horizontally including button */
+}
+
+.modal-product-name {
+    font-family: var(--font-heading);
+    color: var(--color-secondary);
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.modal-product-category {
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+}
+
+.modal-product-description {
+    color: #ccc;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    white-space: pre-line; /* Respetar saltos de línea */
+}
+
+.modal-product-price {
+    font-size: 1.5rem;
+    color: var(--color-white);
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.whatsapp-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: #25D366; /* WhatsApp Green */
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+    max-width: 300px;
+    font-family: var(--font-body);
+    margin: 0 auto; /* Ensure it's centered if wrapper allows */
+}
+
+.whatsapp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    background-color: #20BD5A;
+}

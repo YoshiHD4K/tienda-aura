@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Catalog } from './pages/Catalog';
+import { Admin } from './pages/Admin';
 import './styles/App.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
             <Route path="/catalogo" element={<Catalog />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </AnimatePresence>
       </main>

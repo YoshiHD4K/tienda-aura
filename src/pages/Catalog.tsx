@@ -1,21 +1,56 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { products } from '../data/products';
+import type { Product } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
+import { ProductModal } from '../components/ProductModal';
 import { PageTransition, FadeIn } from '../components/Animations';
+import { supabase } from '../lib/supabase';
 import '../styles/Catalog.css';
 
 export function Catalog() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [startIndex, setStartIndex] = useState(0);
   
   const ITEMS_PER_VIEW = 4;
 
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  async function fetchProducts() {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('products')
+        .select('*, categories(name)')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      if (data) {
+        setProducts(data);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   // Obtener categorías únicas dinámicamente
   const categories = useMemo(() => {
-    return ['Todos', ...Array.from(new Set(products.map(p => p.category)))];
-  }, []);
+    const cats = new Set<string>();
+    products.forEach(p => {
+        if (p.categories?.name) {
+            cats.add(p.categories.name);
+        }
+    });
+    return ['Todos', ...Array.from(cats)];
+  }, [products]);
 
   // Calcular categorías visibles
   const visibleCategories = categories.slice(startIndex, startIndex + ITEMS_PER_VIEW);
@@ -35,10 +70,15 @@ export function Catalog() {
   const filteredProducts = useMemo(() => {
     return products.filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'Todos' || product.category === selectedCategory;
+      const catName = product.categories?.name || 'Varios';
+      const matchesCategory = selectedCategory === 'Todos' || catName === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, products]);
+
+  if (loading) {
+      return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: '#fff' }}>Cargando catálogo...</div>;
+  }
 
   return (
     <PageTransition className="catalog-container" id="productos">
@@ -130,7 +170,7 @@ export function Catalog() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
               >
-                <ProductCard product={product} />
+                <ProductCard product={product} onClick={() => setSelectedProduct(product)} />
               </motion.div>
             ))}
           </AnimatePresence>
@@ -140,6 +180,12 @@ export function Catalog() {
             <p>No se encontraron productos que coincidan con tu búsqueda.</p>
         </FadeIn>
       )}
+
+      <AnimatePresence>
+        {selectedProduct && (
+          <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+        )}
+      </AnimatePresence>
     </PageTransition>
   );
 }
